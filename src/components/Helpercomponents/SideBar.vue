@@ -2,11 +2,11 @@
     <div class="side-bar">
         <div class = "menu">
             <div class="menu-container">
-                <p><router-link class="link" to="/landingpage">My Profile</router-link></p>
-                <p><router-link class="link" to ="/patientarchive">Dashboard</router-link></p>
-                <p><router-link class="link" to ="/settings">My Projects</router-link></p>
-                <p><router-link class="link" to ="/settings">Browse Projects</router-link></p>
-                <p><router-link class="link" to ="/settings">Browse Users</router-link></p>
+                <p><router-link class="link" to="/profile">My Profile</router-link></p>
+                <p><router-link class="link" to ="/dashboard">Dashboard</router-link></p>
+                <p><router-link class="link" to ="/myprojects">My Projects</router-link></p>
+                <p><router-link class="link" to ="/browseprojects">Browse Projects</router-link></p>
+                <p><router-link class="link" to ="/browseusers">Browse Users</router-link></p>
             </div>
         </div>
     </div>

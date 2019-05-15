@@ -5,11 +5,15 @@ import VueYouTubeEmbed from 'vue-youtube-embed'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VCalendar from 'v-calendar';
+
 
 Vue.config.productionTip = false;
 
 Vue.use(VueYouTubeEmbed);
 Vue.use(BootstrapVue);
+Vue.use(VCalendar);
+
 
 
 new Vue({

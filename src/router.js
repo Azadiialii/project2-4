@@ -3,13 +3,14 @@ import Router from 'vue-router'
 import LandingPage from './components/LandingPage'
 import Login from './components/Login'
 import Register from './components/Register'
+import Profile from './components/Profile'
 import Dashboard from './components/Dashboard'
 
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
+    routes: [
+      {
         path: '/',
         name: 'landingpage',
         component: LandingPage
@@ -28,6 +29,11 @@ export default new Router({
         path: '/dashboard',
         name: 'dashboard',
         component: Dashboard
+    },
+    {
+        path: '/profile',
+        name: 'profile',
+        component: Profile
     },
   ]
 })
