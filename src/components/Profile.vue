@@ -15,8 +15,21 @@
             <p>Contact Info:</p><input type="text">
             <p>State of Employment:</p><input type="text">
             <p>Availability:</p><input type="text">
-            <p>Skill:</p><input type="text">
-            <p>Experience Level:</p><input type="text">
+            <p>Skill:</p>
+            <select>
+                <option value="0">Engineer - Mechanical</option>
+                <option value="1">Engineer - Biomedical</option>
+                <option value="2">Engineer - Software</option>
+                <option value="3">Sales</option>
+                <option value="4">Marketing</option>
+                <option value="5">Management</option>
+            </select>
+            <p>Experience Level:</p>
+            <select>
+                <option value="0">Junior</option>
+                <option value="1">Medior</option>
+                <option value="2">Senior</option>
+            </select>
             <input class="submit" type="submit">
         </form>
     </div>

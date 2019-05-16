@@ -5,6 +5,9 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Profile from './components/Profile'
 import Dashboard from './components/Dashboard'
+import MyProjects from './components/MyProjects'
+import BrowseProjects from './components/BrowseProjects'
+import BrowseUsers from './components/BrowseUsers'
 
 Vue.use(Router);
 
@@ -34,6 +37,19 @@ export default new Router({
         path: '/profile',
         name: 'profile',
         component: Profile
+    },
+    {
+        path: '/myprojects',
+        name: 'myprojects',
+        component: MyProjects
+    },{
+        path: '/browseprojects',
+        name: 'broswseprojects',
+        component: BrowseProjects
+    },{
+        path: '/browseusers',
+        name: 'browseusers',
+        component: BrowseUsers
     },
   ]
 })
