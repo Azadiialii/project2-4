@@ -1,3 +1,14 @@
+// Make sure ServiceWorkers are supported
+if (navigator.serviceWorker) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('test_sw.js')
+      .then(reg => console.log('Service Worker Registered'))
+      .catch(err => console.log(`Service Worker Error: ${err}`));
+  });
+}
+
+
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
