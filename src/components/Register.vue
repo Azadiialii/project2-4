@@ -6,20 +6,20 @@
             <div class="text">Registreren</div>
 
             <div class="form-holder">
-                <div class="firstname fullfield">Voornaam<p><input v-validate="'required|min:2'" type="text" v-model="firstName" name="Voornaam"></p></div>
-                <div class="lastname fullfield">Achternaam<p><input v-validate="'required|min:2'" type="text" v-model="lastName" name="Achternaam"></p></div>
-                <div class="job halffield">Beroep<p><input v-validate="'required|min:2'" type="text" v-model="job" name="Beroep"></p></div>
-                <div class="skill halffield">Skillniveau<p><input v-validate="'required|min:2'" type="text" v-model="skill" name="Skill"></p></div>
-                <div class="email fullfield">E-mailadres<p><input v-validate="'required|email'" type="text" v-model="username" name="E-mail"></p></div>
-                <div class="password halffield">Wachtwoord<p><input v-validate="'required|min:8'" type="password" v-model="password" name="Wachtwoord" ref="password"></p></div>
-                <div class="passwordcheck halffield">Herhaal wachtwoord<p><input v-validate="'required|confirmed:password'" type="password" v-model="passwordCheck" name="Controle wachtwoord" data-vv-as="Wachtwoord"></p></div>
-                <div class="email error"><p class="alert" v-if="errors.has('E-mail')">{{ errors.first('E-mail')}}</p></div>
+                <div class="firstname fullfield">Voornaam<p><input v-validate="'required|min:2'" type="text" v-model="firstName" name="Voornaam"></p>
+                <div class="firstname error"><p class="alert" v-if="errors.has('Voornaam')">{{ errors.first('Voornaam')}}</p></div></div>
+                <div class="lastname fullfield">Achternaam<p><input v-validate="'required|min:2'" type="text" v-model="lastName" name="Achternaam"></p>
+                <div class="lastname error"><p class="alert" v-if="errors.has('Achternaam')">{{ errors.first('Achternaam')}}</p></div></div>
+                <div class="job halffield">Beroep<p><input v-validate="'required|min:2'" type="text" v-model="job" name="Beroep"></p>
+                <div class="job error"><p class="alert" v-if="errors.has('Beroep')">{{ errors.first('Beroep')}}</p></div></div>
+                <div class="skill halffield">Skillniveau<p><input v-validate="'required|min:2'" type="text" v-model="skill" name="Skill"></p>
+                <div class="skill error"><p class="alert" v-if="errors.has('Skill')">{{ errors.first('Skill')}}</p></div></div>
+                <div class="email fullfield">E-mailadres<p><input v-validate="'required|email'" type="text" v-model="username" name="E-mail"></p>
+                <div class="email error"><p class="alert" v-if="errors.has('E-mail')">{{ errors.first('E-mail')}}</p></div></div>
+                <div class="password halffield">Wachtwoord<p><input v-validate="'required|min:8'" type="password" v-model="password" name="Wachtwoord" ref="password"></p>
                 <div class="password error"><p class="alert" v-if="errors.has('Wachtwoord')">{{ errors.first('Wachtwoord')}}</p></div>
-                <div class="firstname error"><p class="alert" v-if="errors.has('Voornaam')">{{ errors.first('Voornaam')}}</p></div>
-                <div class="lastname error"><p class="alert" v-if="errors.has('Achternaam')">{{ errors.first('Achternaam')}}</p></div>
-                <div class="job error"><p class="alert" v-if="errors.has('Beroep')">{{ errors.first('Beroep')}}</p></div>
-                <div class="skill error"><p class="alert" v-if="errors.has('Skill')">{{ errors.first('Skill')}}</p></div>
-                <div class="passwordcheck error"><p class="alert" v-if="errors.has('Controle wachtwoord')">{{errors.first('Controle wachtwoord')}}</p></div>
+                <div class="passwordcheck error"><p class="alert" v-if="errors.has('Controle wachtwoord')">{{errors.first('Controle wachtwoord')}}</p></div></div>
+                <div class="passwordcheck halffield">Herhaal wachtwoord<p><input v-validate="'required|confirmed:password'" type="password" v-model="passwordCheck" name="Controle wachtwoord" data-vv-as="Wachtwoord"></p></div>
             </div>
 
             <div class="submit"><input type="submit" value="Registreren" :disabled="this.disabled"/></div>
@@ -65,7 +65,7 @@
                         bodyFormData.set('job', this.job);
                         bodyFormData.set('skill', this.skill);
                         return axios(url, {
-                            method: 'PUT',
+                            method: 'POST',
                             mode: 'no-cors',
                             headers: {
                                 'Access-Control-Allow-Origin': '*',
