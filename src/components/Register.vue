@@ -1,66 +1,176 @@
 <template>
-    <div class="wrapper">
-        <nav-bar></nav-bar>
-        <form @submit="preventDefault()" class="register">
-            <h1>Register</h1>
+    <form @submit.prevent="sendForm">
+        <div class="wrapper">
+            <nav-bar></nav-bar>
 
-            <p class="label">Username: </p>
-            <p><input type="text"></p>
+            <div class="text">Registreren</div>
 
-            <p class="label">Password: </p>
-            <p><input type="text"></p>
+            <div class="form-holder">
+                <div class="firstname fullfield">Voornaam<p><input v-validate="'required|min:2'" type="text" v-model="firstName" name="Voornaam"></p></div>
+                <div class="lastname fullfield">Achternaam<p><input v-validate="'required|min:2'" type="text" v-model="lastName" name="Achternaam"></p></div>
+                <div class="job halffield">Beroep<p><input v-validate="'required|min:2'" type="text" v-model="job" name="Beroep"></p></div>
+                <div class="skill halffield">Skillniveau<p><input v-validate="'required|min:2'" type="text" v-model="skill" name="Skill"></p></div>
+                <div class="email fullfield">E-mailadres<p><input v-validate="'required|email'" type="text" v-model="username" name="E-mail"></p></div>
+                <div class="password halffield">Wachtwoord<p><input v-validate="'required|min:8'" type="password" v-model="password" name="Wachtwoord" ref="password"></p></div>
+                <div class="passwordcheck halffield">Herhaal wachtwoord<p><input v-validate="'required|confirmed:password'" type="password" v-model="passwordCheck" name="Controle wachtwoord" data-vv-as="Wachtwoord"></p></div>
+                <div class="email error"><p class="alert" v-if="errors.has('E-mail')">{{ errors.first('E-mail')}}</p></div>
+                <div class="password error"><p class="alert" v-if="errors.has('Wachtwoord')">{{ errors.first('Wachtwoord')}}</p></div>
+                <div class="firstname error"><p class="alert" v-if="errors.has('Voornaam')">{{ errors.first('Voornaam')}}</p></div>
+                <div class="lastname error"><p class="alert" v-if="errors.has('Achternaam')">{{ errors.first('Achternaam')}}</p></div>
+                <div class="job error"><p class="alert" v-if="errors.has('Beroep')">{{ errors.first('Beroep')}}</p></div>
+                <div class="skill error"><p class="alert" v-if="errors.has('Skill')">{{ errors.first('Skill')}}</p></div>
+                <div class="passwordcheck error"><p class="alert" v-if="errors.has('Controle wachtwoord')">{{errors.first('Controle wachtwoord')}}</p></div>
+            </div>
 
-            <p class="label">Confirm password: </p>
-            <p><input type="text"></p>
+            <div class="submit"><input type="submit" value="Registreren" :disabled="this.disabled"/></div>
 
-            <p><input type="submit" value="Register"></p>
-        </form>
-    </div>
+            <div class="error">{{this.error}}</div>
+        </div>
+    </form>
+
+
 </template>
 
 <script>
+    import axios from 'axios';
     import NavBar from "./Helpercomponents/NavBar";
     export default {
-        name: "Register",
-        components: {NavBar}
+        name: 'Register',
+        data(){
+            return {
+                username: this.username,
+                password: this.password,
+                error: this.error,
+                firstName: this.firstName,
+                lastName: this.lastName,
+                job: this.job,
+                skill: this.skill,
+                message: this.message,
+                passwordCheck: this.passwordCheck,
+                disabled: this.disabled
+            }
+        },
+        components:{NavBar},
+        methods : {
+            sendForm(){
+                this.$validator.validateAll().then((result) => {
+                    if(result){
+                        this.disabled = true;
+                        let url = "http://localhost:5000/register";
+                        let bodyFormData = new FormData();
+                        bodyFormData.set('username', this.username);
+                        bodyFormData.set('password', this.password);
+                        bodyFormData.set('firstname', this.firstName);
+                        bodyFormData.set('lastname', this.lastName);
+                        bodyFormData.set('job', this.job);
+                        bodyFormData.set('skill', this.skill);
+                        return axios(url, {
+                            method: 'PUT',
+                            mode: 'no-cors',
+                            headers: {
+                                'Access-Control-Allow-Origin': '*',
+                                'Content-Type': 'application/json',
+                            },
+                            data: bodyFormData,
+                        }).then(response => {
+                            this.handleResponse(response);
+                        })
+                    }else {
+                        //TODO
+                    }
+                })
+            },
+            handleResponse(response){
+                let responseData = response['data'];
+                this.error = responseData['message'];
+                if(responseData['status']==='success'){
+                    this.$router.push('/login');
+                }
+                else{
+                    this.disabled = false;
+                }
+            }
+        }
     }
 </script>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .wrapper{
+    .wrapper {
+        padding-top: 10vh;
         display: grid;
-        grid-template-columns: 1fr 3fr 1fr;
-        grid-template-rows: 70px 80vh;
+        font-family: "Source Sans Pro", serif;
         justify-items: center;
-        white-space: nowrap;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        font-size: 16px;
     }
-
-    .register{
-        width: 15vw;
-        margin-top: 15vh;
-        grid-column: 2/3;
-        grid-row: 2/3;
+    .form-holder{
         display: grid;
-        grid-template-columns: 100%;
-        grid-auto-rows: 50px;
-        grid-gap: 2vh;
-        justify-items: center;
-
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(10, 1fr);
     }
-
-    .label{
-        justify-self: start;
+    .fullfield{
+        width: 630px;
     }
-
-    input{
-        height: 30px;
-        width: 300px;
+    .halffield{
+        width: 310px;
     }
-
-    input[type="submit"]{
-        grid-row: 4/5;
-        grid-column: 1/2;
+    .text {
+        font-size: 30px;
         justify-self: center;
-        width: 180px;
     }
+    .firstname{
+        grid-column: 5/7;
+        grid-row: 3/4;
+    }
+    .lastname{
+        grid-column: 5/7;
+        grid-row: 4/5;
+    }
+    .job{
+        grid-column: 5/6;
+        grid-row: 5/6;
+    }
+    .skill{
+        padding-left: 10px;
+        grid-column: 6/7;
+        grid-row: 5/6;
+    }
+    .email{
+        grid-column: 5/7;
+        grid-row: 6/7;
+    }
+    .password{
+        grid-column: 5/6;
+        grid-row: 7/8;
+    }
+    .passwordcheck {
+        padding-left: 10px;
+        grid-column: 6/7;
+        grid-row: 7/8;
+    }
+    .error{
+        color: red;
+    }
+    .submit{
+        align-self: center;
+        justify-self: center;
+    }
+    input {
+        outline: 0;
+        width: 100%;
+        font-family: "Source Sans Pro", serif;
+        font-size: 16px;
+    }
+    input[type=submit] {
+        width: 180px;
+        height: 35px;
+        border-radius: 3px;
+        font-size: 14px;
+        font-weight: 600;
+        border: none;
+    }
+
 </style>

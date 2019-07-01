@@ -1,29 +1,79 @@
 <template>
-    <div class="wrapper">
-        <nav-bar></nav-bar>
-        <form @submit="preventDefault()" class="login">
-                <h1>Login</h1>
+    <form @submit.prevent="sendForm">
+        <div class="wrapper">
+            <nav-bar></nav-bar>
+            <div class="text">Inloggen</div>
 
-                <p class="label">Username: </p>
-                <p><input type="text"></p>
+            <div class="login">
+                <div class="email-container">
+                    <div class="email">
+                        E-mailadres<p><input v-validate="'required'" type="text" v-model="username" name="E-mail"></p>
+                        <div class="emailerror"><p class="alert" v-if="errors.has('E-mail')">{{ errors.first('E-mail')}}</p></div>
+                    </div>
 
-                <p class="label">Password: </p>
-                <p><input type="text"></p>
+                </div>
+                <div class="password">
+                    Wachtwoord<p><input v-validate="'required'" type="password" v-model="password" name="Wachtwoord"></p>
+                    <div class="passworderror"><p class="alert" v-if="errors.has('Wachtwoord')">{{ errors.first('Wachtwoord') }}</p></div>
+                </div>
+                <div class="submit"><input type="submit" value="Inloggen"/>
+                    <div class="error">{{this.error}}</div>
+                </div>
+            </div>
 
-                <p><input type="submit" value="Login" @click="toDashboard()"></p>
-        </form>
-    </div>
+            <footer><router-link to="/register">Heeft u geen account? Registreer nu!</router-link></footer>
+
+        </div>
+    </form>
 </template>
 
 <script>
     import NavBar from "./Helpercomponents/NavBar";
+    import axios from 'axios';
     export default {
-        name: "Login",
-        components: {NavBar},
-        methods: {
-            toDashboard(){
-                this.$router.push('/dashboard')
+        name: 'Login',
+        data() {
+            return {
+                username: this.username,
+                password: this.password,
+                error: this.error,
+                disabled: this.disabled,
+                loggedIn: this.loggedIn,
             }
+        },
+        components:{NavBar},
+        methods: {
+            sendForm() {
+                this.$validator.validateAll().then((result) => {
+                    if (result) {
+                        this.disabled = true;
+                        let url = "http://localhost:5000/login";
+                        let bodyFormData = new FormData();
+                        bodyFormData.set('username', this.username);
+                        bodyFormData.set('password', this.password);
+                        return axios(url, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: {
+                                'Access-Control-Allow-Origin': '*',
+                                'Content-Type': 'application/json',
+                            },
+                            data: bodyFormData,
+                        }).then(response => {
+                            this.handleResponse(response);
+                        })
+                    }
+                })
+            },
+            handleResponse(response) {
+                let responseData = response['data'];
+                this.error = responseData['message'];
+                if (responseData['status'] === 'Success') {
+                    this.loggedIn = true;
+                    this.$router.push('/Dashboard');
+                }
+                localStorage.token = responseData['refresh_token'];
+            },
         }
     }
 </script>
@@ -48,10 +98,6 @@
         grid-gap: 2vh;
         justify-items: center;
 
-    }
-
-    .label{
-        justify-self: start;
     }
 
     input{

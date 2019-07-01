@@ -2,19 +2,47 @@
     <div class="side-bar">
         <div class = "menu">
             <div class="menu-container">
+                <verify-login></verify-login>
                 <p><router-link class="link" to="/profile">My Profile</router-link></p>
                 <p><router-link class="link" to ="/dashboard">Dashboard</router-link></p>
                 <p><router-link class="link" to ="/myprojects">My Projects</router-link></p>
                 <p><router-link class="link" to ="/browseprojects">Browse Projects</router-link></p>
                 <p><router-link class="link" to ="/browseusers">Browse Users</router-link></p>
+                <p class="link" @click="logout">Logout</p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import VerifyLogin from '../Helpercomponents/VerifyLogin'
+    import axios from 'axios';
     export default {
-        name: "SideBar"
+        name: "SideBar",
+        components: {VerifyLogin},
+        methods:{
+            logout(){
+                if(typeof localStorage.token !== 'undefined') {
+                    let url = "http://localhost:5000/logout/refresh";
+                    return axios(url, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.token,
+                        },
+                    }).then(response => {
+                        let responseData = response['data'];
+                        let message = responseData['message'];
+                        if(message === 'Refresh token has been revoked'){
+                            localStorage.clear();
+                            this.$router.push('/');
+                        }
+                    })
+                }
+            },
+        },
     }
 </script>
 
