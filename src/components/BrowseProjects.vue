@@ -15,20 +15,22 @@
         </div>
 
         <div class="projects-holder">
-            <div v-for="project in projects">
-                <div class="project">
-                    <div class="square"></div>
-                    <div class="square"></div>
-                    <div class="square"></div>
-                    <div class="square"></div>
-                </div>
-            </div>
+            <table class="project" v-for="project in projects">
+                <tr><td>
+                    <b>Project:</b> {{project.name}}
+                </td><td>
+                    <b>Owner:</b> {{project.owner}}
+                </td><td>
+                    <b>Participants:</b> {{project.participants}}
+                </td></tr>
+            </table>
         </div>
 
     </div>
 </template>
 
 <script>
+    import axios from 'axios';
     import SideBar from "./Helpercomponents/SideBar";
     export default {
         name: "BrowseProjects",
@@ -36,8 +38,20 @@
         data(){
             return{
                 selected: this.selected,
-                projects: [["Project 1"],["Project 2"],["Project 3"],["Project 4"],["Project 5"],["Project 6"],["Project 7"],["Project 8"]]
+                projects: [{'name': 'Project 01', 'owner': 'John Doe', 'participants': 23}]
             }
+        },
+        created() {
+            axios
+                .get("http://localhost:5000/project/all", {headers: {Authorization: "Bearer " + localStorage.token }})
+                .then( response => {
+                    console.log(response);
+                    let i
+                    for (i in response.data.projects) {
+                    let project = response.data.projects[i]
+                        this.projects.push({'name': project.name, 'owner': 'John Doe', 'participants': 23});
+                    }
+            });
         }
     }
 </script>
@@ -81,19 +95,18 @@
         margin-left: 5vw;
         margin-top: 2vw;
         grid-column: 2/3;
-        grid-row: 3/4;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-auto-rows: 10vh;
-        grid-gap: 9vw;
     }
 
     .project{
-        margin-top: 5vh;
         display: grid;
-        grid-template-columns: 5vw 5vw;
-        grid-template-rows: 5vw 5vw;
-        grid-gap: 1vw;
+        margin-top: 5vh;
+        border-radius: 1em;
+        border: 3px solid black;
+        height: 3em;
+        margin-top: 1em;
+        text-indent: 3em;
+        width: 100%;
+        align-items: center;
     }
 
     .square{
