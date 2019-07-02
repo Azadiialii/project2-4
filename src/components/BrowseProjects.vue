@@ -13,46 +13,19 @@
                 <option value="4">Area</option>
             </select>
         </div>
-
-        <div class="projects-holder">
-            <table class="project" v-for="project in projects">
-                <tr><td>
-                    <b>Project:</b> {{project.name}}
-                </td><td>
-                    <b>Owner:</b> {{project.owner}}
-                </td><td>
-                    <b>Participants:</b> {{project.participants}}
-                </td></tr>
-            </table>
-        </div>
-
+        <projectHolder apiURL="http://localhost:5000/project/mine" />
     </div>
 </template>
 
 <script>
     import axios from 'axios';
     import SideBar from "./Helpercomponents/SideBar";
+    import LineChart from './Helpercomponents/LineChart';
+    import projectHolder from './Helpercomponents/ProjectHolder';
+
     export default {
         name: "BrowseProjects",
-        components: {SideBar},
-        data(){
-            return{
-                selected: this.selected,
-                projects: []
-            }
-        },
-        created() {
-            axios
-                .get("http://localhost:5000/project/all", {headers: {Authorization: "Bearer " + localStorage.token }})
-                .then( response => {
-                    console.log(response);
-                    let i
-                    for (i in response.data.projects) {
-                    let project = response.data.projects[i]
-                        this.projects.push({'name': project.name, 'owner': project.owner.firstName + ' ' + project.owner.lastName, 'participants': 23});
-                    }
-            });
-        }
+        components: {SideBar, projectHolder},
     }
 </script>
 
