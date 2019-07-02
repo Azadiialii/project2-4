@@ -38,7 +38,7 @@
         data(){
             return{
                 selected: this.selected,
-                projects: [{'name': 'Project 01', 'owner': 'John Doe', 'participants': 23}]
+                projects: []
             }
         },
         created() {
@@ -49,7 +49,7 @@
                     let i
                     for (i in response.data.projects) {
                     let project = response.data.projects[i]
-                        this.projects.push({'name': project.name, 'owner': 'John Doe', 'participants': 23});
+                        this.projects.push({'name': project.name, 'owner': project.owner.firstName + ' ' + project.owner.lastName, 'participants': 23});
                     }
             });
         }
