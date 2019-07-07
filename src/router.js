@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard'
 import MyProjects from './components/MyProjects'
 import BrowseProjects from './components/BrowseProjects'
 import BrowseUsers from './components/BrowseUsers'
+import projectView from './components/projectView'
 
 Vue.use(Router);
 
@@ -50,6 +51,11 @@ export default new Router({
         path: '/browseusers',
         name: 'browseusers',
         component: BrowseUsers
+    },{
+        path: '/project/:project_id',
+        name: 'project',
+        component: projectView,
+        props: true
     },
   ]
 })
