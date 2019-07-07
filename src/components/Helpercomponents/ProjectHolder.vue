@@ -27,7 +27,7 @@
             }
         },
         mounted() {
-            getWithServiceWorker(this.apiURL, this.storageKey).then(data => {
+            getWithServiceWorker(this.apiURL, "get", this.storageKey).then(data => {
                 let i;
                 for (i in data.projects) {
                 let project = data.projects[i]

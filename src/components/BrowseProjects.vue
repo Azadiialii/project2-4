@@ -13,7 +13,7 @@
                 <option value="4">Area</option>
             </select>
         </div>
-        <projectHolder apiURL="http://localhost:5000/project/mine" storageKey="browseProjectsCache" />
+        <projectHolder apiURL="http://localhost:5000/project/all" storageKey="browseProjectsCache" />
     </div>
 </template>
 

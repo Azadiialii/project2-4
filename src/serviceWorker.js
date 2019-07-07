@@ -1,15 +1,15 @@
 import axios from 'axios';
 
+// The most difficult 20 lines of code i have ever writen --ErrorCode51, 7-7-2019
+
 // this is a minimalist service worker for get requests
-
-function getRequest(url) {
-    return axios.get(url, {headers: {Authorization: "Bearer " + localStorage.token }});
-}
-
-export default async function getWithServiceWorker(url, localStorageAddress) {
+// url: the url to call the api, should begin with http:// or http://
+// method: the method used in the request, example: "get"
+// localStorageAddress: the key used to store the data, must be unique
+export default async function getWithServiceWorker(url, method, localStorageAddress) {
 
     try {
-        let resp = await getRequest(url);
+        let resp = await {"get": getRequest}[method](url);
         // all requests are now complete
         if (resp.status == 200) {
             localStorage.setItem(localStorageAddress, JSON.stringify(resp.data));
@@ -20,7 +20,10 @@ export default async function getWithServiceWorker(url, localStorageAddress) {
         }
     }
     catch {
-        console.log(localStorage.getItem(localStorageAddress));
         return JSON.parse(localStorage.getItem(localStorageAddress));
     }
+}
+
+function getRequest(url) {
+    return axios.get(url, {headers: {Authorization: "Bearer " + localStorage.token }});
 }
