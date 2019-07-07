@@ -13,7 +13,7 @@
                 <option value="4">Area</option>
             </select>
         </div>
-        <projectHolder apiURL="http://localhost:5000/project/mine" />
+        <projectHolder apiURL="http://localhost:5000/project/mine" storageKey="browseProjectsCache" />
     </div>
 </template>
 
@@ -26,6 +26,9 @@
     export default {
         name: "BrowseProjects",
         components: {SideBar, projectHolder},
+        data() {
+            return{ selected: this.selected }
+        }
     }
 </script>
 
