@@ -11,7 +11,7 @@
                 </td></tr><tr><td>
                     <b>Description:</b> {{ project_description }}
                 </td></tr><tr><td>
-                    <b>Owner:</b> {{ project_owner }}
+                    <b>Owner: </b> <router-link :to="'../profile/'+project_owner.user_id">{{ project_owner.name }}</router-link>
                 </td></tr><tr><td>
                     <b>Participants:</b> {{ participants.length }}
                 </td></tr><tr><td>
@@ -19,6 +19,15 @@
                 </td></tr>
             </table><br>
             <h2 class="sectionHeader"> Posts </h2>
+            <button v-if="!showingPost" v-on:click="showingPost=true">Write post</button>
+            <button v-if="showingPost" v-on:click="showingPost=false">Cancel</button>
+            <table v-if="showingPost"><tr><td class="inputTitle">
+                <b>title:</b> </td><td> <input v-model="postTitle" placeholder="title">
+            </td></tr><tr><td class="inputTitle">
+                <b>message:</b> </td><td> <textarea v-model="postMessage" placeholder="message" class="postMessageInput" />
+            </td></tr>
+                <button v-on:click="submitPost">Submit</button>
+            </table>
             <table>
                 <tr class="post" v-for="post in posts"><td>
                     <b>{{ post.author }}:</b>
@@ -30,9 +39,10 @@
                 <tr v-for="participant in participants"><td>
                     {{ participant.name }}
                  </td>
-                    <a href="#">> Go to user</a>
+                    <router-link :to="'../profile/'+participant.user_id">>Go to user</router-link>
                  </tr>
              </table>
+             <button v-on:click="ParticipateInProject">Participate</button>
         </div>
     </div>
 </template>
@@ -40,7 +50,7 @@
 <script>
     import axios from 'axios';
     import SideBar from "./Helpercomponents/SideBar";
-    import getWithServiceWorker from '@/serviceWorker.js'
+    import serviceworker from '@/serviceWorker.js'
 
     export default {
         name: "BrowseProjects",
@@ -52,18 +62,22 @@
                 project_owner: "",
                 project_description: "",
                 posts: [],
-                participants: []
+                participants: [],
+                showingPost: false,
+                postTitle: "",
+                postMessage: ""
+
             }
         },
         mounted() {
-            getWithServiceWorker('http://localhost:5000/project/' + this.project_id, 'get', 'projectData' + this.project_id).then(data => {
+            serviceworker.getWithServiceWorker('http://localhost:5000/project/' + this.project_id, 'get', 'projectData' + this.project_id).then(data => {
+
                 this.project_name = data.name;
-                this.project_owner = (data.owner.firstName + " " + data.owner.lastName);
+                this.project_owner = {name: data.owner.firstName + " " + data.owner.lastName, user_id: data.owner.id};
                 this.project_description = data.description;
                 if (!!data.posts) {
                     for (let i in data.posts) {
                         let post = data.posts[i];
-                        console.log(post);
                         this.posts.push({author: post.author.firstName + " " + post.author.lastName, message: post.message});
                     }
                 }
@@ -74,6 +88,23 @@
                     }
                 }
             })
+        },
+        methods: {
+            submitPost: function(event) {
+                let formdata = new FormData();
+                formdata.set('title', this.postTitle);
+                formdata.set('message', this.postMessage);
+                formdata.set('project_id', this.project_id);
+                serviceworker.postRequest('http://localhost:5000/post', formdata).then(resonse => {
+                    location.reload(); })
+                .catch(error => { alert("Post submit failed") });
+            },
+            ParticipateInProject: function(event) {
+                let formdata = new FormData();
+                serviceworker.postRequest('http://localhost:5000/project/' + this.project_id + '/participant', formdata).then(resonse => {
+                    location.reload(); })
+                .catch(error => { alert("Post submit failed") });
+            }
         }
     }
 </script>
@@ -126,5 +157,24 @@
         align-items: center;
         padding-left: 2em;
         padding-right: 1em;
+    }
+
+    button{
+        background-color: #008CBA;
+        border: none;
+        color: white;
+        text-align: center;
+        padding: 15px 32px;
+        width: 10em;
+    }
+
+    .inputTitle {
+        width: 10em;
+    }
+
+    .postMessageInput{
+        width: 50em;
+        height: 15em;
+        vertical-align: bottom;
     }
 </style>

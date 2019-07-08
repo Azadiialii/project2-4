@@ -13,14 +13,14 @@
             <h1> {{ name }} </h1>
             <h2>Projects</h2>
         </div>
-        <projectHolder apiURL="http://localhost:5000/project/mine" storageKey="dashProjectsCache" />
+        <projectHolder apiURL="http://localhost:5000/project/participating" storageKey="dashProjectsCache" />
         <div class="content">
             <h2>Contacts</h2>
             <table>
                 <tr v-for="contact in contacts"><td>
                     {{ contact.name }}
                  </td>
-                    <a href="#">> Go to user</a>
+                    <router-link :to="'Profile/'+contact.user_id">>Go to user</router-link>
                  </tr>
              </table>
         </div>
@@ -31,7 +31,7 @@
     import SideBar from "./Helpercomponents/SideBar";
     import LineChart from './Helpercomponents/LineChart'
     import projectHolder from './Helpercomponents/ProjectHolder';
-    import getWithServiceWorker from '@/serviceWorker.js'
+    import serviceworker from '@/serviceWorker.js'
 
     export default {
         name: "Dashboard",
@@ -43,10 +43,10 @@
             }
         },
         mounted() {
-            getWithServiceWorker('http://localhost:5000/user', 'get', 'dashUserData').then(data => {
+            serviceworker.getWithServiceWorker('http://localhost:5000/user', 'get', 'dashUserData').then(data => {
                 this.name = (data.firstName + " " + data.lastName);
                 for (let i in data.contacts) {
-                    this.contacts.push({name: data.contacts[i].name, user_id: data.contacts[i].id});
+                    this.contacts.push({name: data.contacts[i].name, user_id: data.contacts[i].user_id});
                 }
             })
         }

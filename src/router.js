@@ -35,9 +35,10 @@ export default new Router({
         component: Dashboard
     },
     {
-        path: '/profile',
+        path: '/profile/:user_id',
         name: 'profile',
-        component: Profile
+        component: Profile,
+        props: true
     },
     {
         path: '/myprojects',
