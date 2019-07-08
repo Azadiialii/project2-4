@@ -38,7 +38,6 @@
         },
         mounted() {
             serviceworker.getWithServiceWorker('http://localhost:5000/user/' + this.user_id, 'get', 'profileUserData' + this.user_id).then(data => {
-                console.log(data);
                 this.name = (data.firstName + " " + data.lastName);
                 this.job = data.job;
                 this.skill = data.skill

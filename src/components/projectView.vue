@@ -42,7 +42,8 @@
                     <router-link :to="'../profile/'+participant.user_id">>Go to user</router-link>
                  </tr>
              </table>
-             <button v-on:click="ParticipateInProject">Participate</button>
+             <button v-if="!isOwner && !isParticipant" v-on:click="ParticipateInProject">Participate</button>
+             <button v-if="!isOwner && isParticipant" v-on:click="leaveProject">Leave Project</button>
         </div>
     </div>
 </template>
@@ -65,16 +66,20 @@
                 participants: [],
                 showingPost: false,
                 postTitle: "",
-                postMessage: ""
+                postMessage: "",
+                isParticipating: false,
+                isOwner: true
 
             }
         },
         mounted() {
             serviceworker.getWithServiceWorker('http://localhost:5000/project/' + this.project_id, 'get', 'projectData' + this.project_id).then(data => {
-
+                console.log(data);
                 this.project_name = data.name;
                 this.project_owner = {name: data.owner.firstName + " " + data.owner.lastName, user_id: data.owner.id};
                 this.project_description = data.description;
+                this.isParticipant = data.isParticipating;
+                this.isOwner = data.isOwner
                 if (!!data.posts) {
                     for (let i in data.posts) {
                         let post = data.posts[i];
@@ -102,6 +107,12 @@
             ParticipateInProject: function(event) {
                 let formdata = new FormData();
                 serviceworker.postRequest('http://localhost:5000/project/' + this.project_id + '/participant', formdata).then(resonse => {
+                    location.reload(); })
+                .catch(error => { alert("Post submit failed") });
+            },
+            leaveProject: function(event) {
+                let formdata = new FormData();
+                serviceworker.deleteRequest('http://localhost:5000/project/' + this.project_id + '/participant', formdata).then(resonse => {
                     location.reload(); })
                 .catch(error => { alert("Post submit failed") });
             }
