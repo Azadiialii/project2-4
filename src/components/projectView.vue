@@ -9,6 +9,8 @@
                 <tr><td>
                     <b>Project id:</b> {{ project_id }}
                 </td></tr><tr><td>
+                    <b>Description:</b> {{ project_description }}
+                </td></tr><tr><td>
                     <b>Owner:</b> {{ project_owner }}
                 </td></tr><tr><td>
                     <b>Participants:</b> {{ participants.length }}
@@ -38,6 +40,7 @@
 <script>
     import axios from 'axios';
     import SideBar from "./Helpercomponents/SideBar";
+    import getWithServiceWorker from '@/serviceWorker.js'
 
     export default {
         name: "BrowseProjects",
@@ -45,18 +48,32 @@
         props: ["project_id"],
         data() {
             return {
-                project_name: "Example Project",
-                project_owner: "John Doe",
-                nr_of_participants: 23,
-                posts: [
-                    {author: "John Doe", message: "Hello world, this is a post"},
-                    {author: "Simon", message: "Bacon ipsum dolor amet flank turkey sirloin shank chuck. Ribeye drumstick shoulder t-bone, hamburger kevin pork meatball andouille alcatra landjaeger bacon. Swine tail strip steak shank, chicken ribeye sirloin ham hock short ribs alcatra flank kielbasa jerky. Porchetta prosciutto capicola, sirloin chuck chicken tri-tip ball tip flank. Pancetta shank corned beef tenderloin burgdoggen, turducken strip steak. Turkey drumstick salami, boudin shoulder ribeye venison picanha. Kevin pork chop pig ball tip."}
-                ],
-                participants: [
-                    {name: "John Doe", user_id: 1},
-                    {name: "Yo Mama", user_id: 2}
-                ]
+                project_name: "",
+                project_owner: "",
+                project_description: "",
+                posts: [],
+                participants: []
             }
+        },
+        mounted() {
+            getWithServiceWorker('http://localhost:5000/project/' + this.project_id, 'get', 'projectData' + this.project_id).then(data => {
+                this.project_name = data.name;
+                this.project_owner = (data.owner.firstName + " " + data.owner.lastName);
+                this.project_description = data.description;
+                if (!!data.posts) {
+                    for (let i in data.posts) {
+                        let post = data.posts[i];
+                        console.log(post);
+                        this.posts.push({author: post.author.firstName + " " + post.author.lastName, message: post.message});
+                    }
+                }
+                if (!!data.participants) {
+                    for (let i in data.participants) {
+                        let participant = data.participants[i];
+                        this.participants.push({name: participant.firstName + " " + participant.lastName, user_id: participant.id});
+                    }
+                }
+            })
         }
     }
 </script>
