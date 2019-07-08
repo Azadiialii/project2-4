@@ -28,10 +28,15 @@
         },
         mounted() {
             getWithServiceWorker(this.apiURL, "get", this.storageKey).then(data => {
+                console.log(data);
                 let i;
                 for (i in data.projects) {
-                let project = data.projects[i]
-                    this.projects.push({'name': project.name, 'owner': project.owner.firstName + ' ' + project.owner.lastName, 'participants': 23});
+                    let projectData = data.projects[i]
+                    let project = {'name': projectData.name, 'owner': projectData.owner.firstName + ' ' + projectData.owner.lastName, participants: 0};
+                    if (!!projectData.participants) {
+                        project.participants = projectData.participants.length;
+                    }
+                    this.projects.push(project);
                 }
             })
         }

@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-// The most difficult 20 lines of code i have ever writen --ErrorCode51, 7-7-2019
-
 // this is a minimalist service worker for get requests
 // url: the url to call the api, should begin with http:// or http://
 // method: the method used in the request, example: "get"

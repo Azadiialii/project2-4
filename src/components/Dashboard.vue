@@ -9,67 +9,46 @@
             </div>
         </div>
 
-        <div class="views">
-            <h1 class="views-text">Profile Views</h1>
-            <p><button class="button">Check In</button></p>
-            <p><button class="button">Check Out</button></p>
+        <div class="content">
+            <h1> {{ name }} </h1>
+            <h2>Projects</h2>
         </div>
-
-        <div class="graph">
-            <h1>My Activity</h1>
-            <line-chart :chart-data="datacollection"></line-chart>
+        <projectHolder apiURL="http://localhost:5000/project/mine" storageKey="dashProjectsCache" />
+        <div class="content">
+            <h2>Contacts</h2>
+            <table>
+                <tr v-for="contact in contacts"><td>
+                    {{ contact.name }}
+                 </td>
+                    <a href="#">> Go to user</a>
+                 </tr>
+             </table>
         </div>
-
-        <div class="date">
-            <h2>Search agenda:</h2>
-            <v-date-picker is-expanded
-                    mode='single'
-                    show-caps>
-            </v-date-picker>
-        </div>
-
-        <div class="email">
-            <img src="../assets/love-letter-email-svgrepo-com.svg" height="50px">
-        </div>
-
     </div>
 </template>
 
 <script>
     import SideBar from "./Helpercomponents/SideBar";
     import LineChart from './Helpercomponents/LineChart'
+    import projectHolder from './Helpercomponents/ProjectHolder';
+    import getWithServiceWorker from '@/serviceWorker.js'
 
     export default {
         name: "Dashboard",
-        components: {SideBar, LineChart},
+        components: {SideBar, LineChart, projectHolder},
         data () {
             return {
-                datacollection: null
+                name: "Loading...",
+                contacts: []
             }
         },
-        mounted () {
-            this.fillData()
-        },
-        methods: {
-            fillData () {
-                this.datacollection = {
-                    labels: [this.getRandomInt(), this.getRandomInt()],
-                    datasets: [
-                        {
-                            label: 'Data One',
-                            backgroundColor: '#f87979',
-                            data: [this.getRandomInt(), this.getRandomInt()]
-                        }, {
-                            label: 'Data One',
-                            backgroundColor: '#f87979',
-                            data: [this.getRandomInt(), this.getRandomInt()]
-                        }
-                    ]
+        mounted() {
+            getWithServiceWorker('http://localhost:5000/user', 'get', 'dashUserData').then(data => {
+                this.name = (data.firstName + " " + data.lastName);
+                for (let i in data.contacts) {
+                    this.contacts.push({name: data.contacts[i].name, user_id: data.contacts[i].id});
                 }
-            },
-            getRandomInt () {
-                return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-            }
+            })
         }
     }
 </script>
@@ -77,8 +56,8 @@
 <style scoped>
     .wrapper{
         display: grid;
-        grid-template-columns: 16.8vw 50vw 20vw;
-        grid-template-rows: 15vh 5vh 25vh 35vh;
+        grid-template-columns: 16.8vw 80vw;
+        grid-template-rows: 15vh auto auto auto;
     }
 
     .sidebar{
@@ -109,35 +88,21 @@
         align-items: center;
     }
 
+    .content{
+        display: grid;
+        margin-left: 5vw;
+        margin-top: 2vw;
+        grid-column: 2/3;
+    }
+
     .dash-text{
         justify-self: start;
     }
 
-    .views{
-        margin-left: 10vw;
+    .project-holder{
+        display: grid;
+        margin-left: 5vw;
+        margin-top: 0px;
         grid-column: 2/3;
-        grid-row: 3/4;
-    }
-
-    .graph{
-        margin-left: 10vw;
-        grid-column: 2/3;
-        grid-row: 4/5;
-        width: 300px;
-        height: 300px;
-    }
-
-    .date{
-        white-space: nowrap;
-        grid-column: 3/4;
-        grid-row: 3/4;
-        width: 200px;
-    }
-
-    .email{
-        grid-column: 3/4;
-        grid-row: 4/5;
-        justify-self: end;
-        align-self: end;
     }
 </style>

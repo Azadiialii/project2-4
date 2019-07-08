@@ -67,24 +67,6 @@
         text-indent: 20px;
     }
 
-    .projects-holder{
-        margin-left: 5vw;
-        margin-top: 2vw;
-        grid-column: 2/3;
-    }
-
-    .project{
-        display: grid;
-        margin-top: 5vh;
-        border-radius: 1em;
-        border: 3px solid black;
-        height: 3em;
-        margin-top: 1em;
-        text-indent: 3em;
-        width: 100%;
-        align-items: center;
-    }
-
     .square{
         background-color: black;
         border-radius: 20px;
