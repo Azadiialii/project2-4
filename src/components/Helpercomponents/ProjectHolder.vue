@@ -13,27 +13,32 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import getWithServiceWorker from '@/serviceWorker.js'
 
     export default {
         name: "projectHolder",
-        props: ['apiURL'],
+        props: ['apiURL', "storageKey"],
+        mounted() {
+            getWithServiceWorker()
+        },
         data() {
             return{
                 projects: []
             }
         },
-        created() {
-            axios
-                .get(this.apiURL, {headers: {Authorization: "Bearer " + localStorage.token }})
-                .then( response => {
-                    console.log(response);
-                    let i
-                    for (i in response.data.projects) {
-                    let project = response.data.projects[i]
-                        this.projects.push({'name': project.name, 'owner': project.owner.firstName + ' ' + project.owner.lastName, 'participants': 23});
+        mounted() {
+            getWithServiceWorker(this.apiURL, "get", this.storageKey).then(data => {
+                console.log(data);
+                let i;
+                for (i in data.projects) {
+                    let projectData = data.projects[i]
+                    let project = {'name': projectData.name, 'owner': projectData.owner.firstName + ' ' + projectData.owner.lastName, participants: 0};
+                    if (!!projectData.participants) {
+                        project.participants = projectData.participants.length;
                     }
-            });
+                    this.projects.push(project);
+                }
+            })
         }
     }
 </script>

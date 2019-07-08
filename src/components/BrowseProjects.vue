@@ -13,7 +13,7 @@
                 <option value="4">Area</option>
             </select>
         </div>
-        <projectHolder apiURL="http://localhost:5000/project/mine" />
+        <projectHolder apiURL="http://localhost:5000/project/all" storageKey="browseProjectsCache" />
     </div>
 </template>
 
@@ -26,6 +26,9 @@
     export default {
         name: "BrowseProjects",
         components: {SideBar, projectHolder},
+        data() {
+            return{ selected: this.selected }
+        }
     }
 </script>
 
@@ -62,24 +65,6 @@
         width: 100%;
         border-radius: 20px;
         text-indent: 20px;
-    }
-
-    .projects-holder{
-        margin-left: 5vw;
-        margin-top: 2vw;
-        grid-column: 2/3;
-    }
-
-    .project{
-        display: grid;
-        margin-top: 5vh;
-        border-radius: 1em;
-        border: 3px solid black;
-        height: 3em;
-        margin-top: 1em;
-        text-indent: 3em;
-        width: 100%;
-        align-items: center;
     }
 
     .square{

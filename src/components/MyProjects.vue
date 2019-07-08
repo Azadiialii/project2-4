@@ -9,7 +9,7 @@
                 <input type="text" placeholder="sector">
                 <img class="project-box-img" src="../assets/f7265d26a8ede183e98ccad5441f01cd.png" height="75px" width="75px">
         </div>
-        <projectHolder apiURL="http://localhost:5000/project/mine" />
+        <projectHolder apiURL="http://localhost:5000/project/mine" storageKey="myProjectsCache" />
     </div>
 </template>
 
