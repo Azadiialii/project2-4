@@ -4,31 +4,32 @@
 
         <div class="search-projects-bar">
             <div class="projects-text">Browse Users</div>
-            <input class="search" type="text" placeholder="Search on...">
-            <select class="select" v-bind="this.selected">
-                <option value="0">Title</option>
-                <option value="1">Project</option>
-                <option value="2">Sector</option>
-                <option value="3">User</option>
-                <option value="4">Area</option>
-            </select>
         </div>
 
-        <div class="projects-holder">
-            <div v-for="project in projects">
-                <div class="project">
-                    <div class="square"></div>
-                    <div class="square"></div>
-                    <div class="square"></div>
-                    <div class="square"></div>
-                </div>
-            </div>
+        <div class="content">
+            <table>
+                <tr v-for="user in users">
+                <td>
+                    <b>Name: </b> {{ user.name }}
+                </td><td>
+                    <b>Job: </b> {{ user.job }}
+                </td><td>
+                    <b>Skill: </b> {{ user.skill }}
+                </td><td>
+                    <b>Posts: </b> {{ user.posts }}
+                </td><td>
+                    <router-link :to="'Profile/'+user.user_id">>Go to user</router-link>
+                </td>
+                </tr>
+            </table>
         </div>
 
     </div>
 </template>
 
 <script>
+    import serviceworker from '@/serviceWorker.js'
+
     import SideBar from "./Helpercomponents/SideBar";
     export default {
         name: "BrowseUsers",
@@ -36,8 +37,17 @@
         data(){
             return{
                 selected: this.selected,
-                projects: [["Project 1"],["Project 2"],["Project 3"],["Project 4"],["Project 5"],["Project 6"],["Project 7"],["Project 8"]]
+                users: []
             }
+        },
+        mounted() {
+            serviceworker.getWithServiceWorker('http://localhost:5000/user/all', 'get', 'browseUserCache').then(data => {
+                console.log(data);
+                for (let i in data.users) {
+                    let user = data.users[i];
+                    this.users.push({name: user.firstName + " " + user.lastName, job: user.job, skill: user.skill, user_id: user.id, posts: user.posts.length});
+                }
+            })
         }
     }
 </script>
@@ -77,27 +87,10 @@
         text-indent: 20px;
     }
 
-    .projects-holder{
+    .content{
+        display: grid;
         margin-left: 5vw;
         margin-top: 2vw;
         grid-column: 2/3;
-        grid-row: 3/4;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-auto-rows: 10vh;
-        grid-gap: 9vw;
-    }
-
-    .project{
-        margin-top: 5vh;
-        display: grid;
-        grid-template-columns: 5vw 5vw;
-        grid-template-rows: 5vw 5vw;
-        grid-gap: 1vw;
-    }
-
-    .square{
-        background-color: black;
-        border-radius: 20px;
     }
 </style>

@@ -74,7 +74,6 @@
         },
         mounted() {
             serviceworker.getWithServiceWorker('http://localhost:5000/project/' + this.project_id, 'get', 'projectData' + this.project_id).then(data => {
-                console.log(data);
                 this.project_name = data.name;
                 this.project_owner = {name: data.owner.firstName + " " + data.owner.lastName, user_id: data.owner.id};
                 this.project_description = data.description;
