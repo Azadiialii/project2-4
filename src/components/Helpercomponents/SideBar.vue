@@ -3,7 +3,6 @@
         <div class = "menu">
             <div class="menu-container">
                 <verify-login></verify-login>
-                <p><router-link class="link" to="/profile">My Profile</router-link></p>
                 <p><router-link class="link" to ="/dashboard">Dashboard</router-link></p>
                 <p><router-link class="link" to ="/myprojects">My Projects</router-link></p>
                 <p><router-link class="link" to ="/browseprojects">Browse Projects</router-link></p>

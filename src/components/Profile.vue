@@ -5,41 +5,63 @@
         <div class="profile">
             <div class="profile-contents">
                 <img class="profile-img" src="../assets/profile-png-icon-2.jpg" height="75px" width="75px">
-                <div class="profile-text">My Profile</div>
+                <div class="profile-text">Profile</div>
             </div>
         </div>
 
-        <form class="profile-info" @submit="preventDefault()">
-            <p>Name:</p><input type="text">
-            <p>Age:</p><input type="text">
-            <p>Contact Info:</p><input type="text">
-            <p>State of Employment:</p><input type="text">
-            <p>Availability:</p><input type="text">
-            <p>Skill:</p>
-            <select>
-                <option value="0">Engineer - Mechanical</option>
-                <option value="1">Engineer - Biomedical</option>
-                <option value="2">Engineer - Software</option>
-                <option value="3">Sales</option>
-                <option value="4">Marketing</option>
-                <option value="5">Management</option>
-            </select>
-            <p>Experience Level:</p>
-            <select>
-                <option value="0">Junior</option>
-                <option value="1">Medior</option>
-                <option value="2">Senior</option>
-            </select>
-            <input class="submit" type="submit">
-        </form>
+        <div class="content">
+            <p>Name:</p> <b>{{ name }}</b>
+            <p>Job:</p> <b>{{ job }}</b>
+            <p>Skill:</p> <b>{{ skill }}</b>
+            <button v-if="!isUser && !isContact" v-on:click="addContact">Add contact</button>
+            <button v-if="!isUser && isContact" v-on:click="removeContact">Remove contact</button>
+        </div>
     </div>
 </template>
 
 <script>
+    import serviceworker from '@/serviceWorker.js'
+
     import SideBar from "./Helpercomponents/SideBar";
     export default {
         name: "Profile",
-        components: {SideBar}
+        components: {SideBar},
+        props: ['user_id'],
+        data() {
+            return({
+                name: 'Loading...',
+                job: '',
+                skill: '',
+                isUser: true,
+                isContact: false
+            })
+        },
+        mounted() {
+            serviceworker.getWithServiceWorker('http://localhost:5000/user/' + this.user_id, 'get', 'profileUserData' + this.user_id).then(data => {
+                this.name = (data.firstName + " " + data.lastName);
+                this.job = data.job;
+                this.skill = data.skill
+                if (!data.email) {
+                    this.isUser = false;
+                }
+                this.isContact = data.isContact;
+            })
+        },
+        methods: {
+            addContact: function(event) {
+                let formdata = new FormData();
+                serviceworker.postRequest('http://localhost:5000/user/' + this.user_id + '/contact', formdata).then(resonse => {
+                    location.reload(); })
+                .catch(error => { alert("Contact request failed") });
+            },
+            removeContact: function(event) {
+                let formdata = new FormData();
+                serviceworker.deleteRequest('http://localhost:5000/user/' + this.user_id + '/contact', formdata).then(resonse => {
+                    location.reload(); })
+                .catch(error => { alert("Remove request failed") });
+            }
+
+        }
     }
 </script>
 
@@ -78,7 +100,7 @@
         justify-self: start;
     }
 
-    .profile-info{
+    .content{
         margin-left: 10vw;
         margin-top: 10vh;
         grid-column: 2/3;
@@ -90,6 +112,15 @@
 
     .submit{
         grid-column: 2/3;
+    }
+
+    button{
+        background-color: #008CBA;
+        border: none;
+        color: white;
+        text-align: center;
+        padding: 15px 32px;
+        width: 12em;
     }
 
 </style>
