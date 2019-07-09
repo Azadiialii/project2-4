@@ -13,10 +13,11 @@
                     <p><input class="button" type="submit"/></p>
                 </form>
             </div>
-
+            <h1>BetterLinkedIn</h1>
         </div>
 
         <div class="text">
+
             <div class="paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet fringilla molestie. Vivamus euismod convallis lobortis. Etiam vel tortor vitae metus eleifend mollis. Vestibulum sed tincidunt lorem, a gravida magna. Sed eget nibh quis libero tristique fermentum a id dui. Sed sodales tellus lectus, gravida vulputate nunc tempus nec. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
             <div class="paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet fringilla molestie. Vivamus euismod convallis lobortis. Etiam vel tortor vitae metus eleifend mollis. Vestibulum sed tincidunt lorem, a gravida magna. Sed eget nibh quis libero tristique fermentum a id dui. Sed sodales tellus lectus, gravida vulputate nunc tempus nec. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
             <div class="paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet fringilla molestie. Vivamus euismod convallis lobortis. Etiam vel tortor vitae metus eleifend mollis. Vestibulum sed tincidunt lorem, a gravida magna. Sed eget nibh quis libero tristique fermentum a id dui. Sed sodales tellus lectus, gravida vulputate nunc tempus nec. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>

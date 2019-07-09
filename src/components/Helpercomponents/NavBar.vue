@@ -3,8 +3,9 @@
         <router-link class="home" to="/">Home</router-link>
 
         <div class="login-register">
-            <router-link class="login" to="/login">Login</router-link>
-            <router-link class="register" to="/register">Register</router-link>
+            <router-link v-if="!isLoggedIn" class="login" to="/login">Login</router-link>
+            <router-link v-if="!isLoggedIn" class="register" to="/register">Register</router-link>
+            <router-link v-if="isLoggedIn" class="register" to="/dashboard">Dashboard</router-link>
         </div>
     </div>
 
@@ -12,7 +13,15 @@
 
 <script>
     export default {
-        name: "NavBar"
+			name: "NavBar",
+			data() {
+				return { isLoggedIn: false }
+			},
+			mounted() {
+				if (!!localStorage.token) {
+					this.isLoggedIn = true;
+				}
+			}
     }
 </script>
 
